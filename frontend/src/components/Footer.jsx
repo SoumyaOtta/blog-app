@@ -94,12 +94,12 @@ const Footer = () => {
             <h2 className="text-lg font-semibold mb-4">Company</h2>
             <ul className="space-y-2">
               <li>
-                <a href="http://localhost:5173/about" className="text-gray-400 hover:text-white">
+                <a href="#" className="text-gray-400 hover:text-white">
                   About
                 </a>
               </li>
               <li>
-                <a href="http://localhost:5173/contact" className="text-gray-400 hover:text-white">
+                <a href="#" className="text-gray-400 hover:text-white">
                   Contact
                 </a>
               </li>
