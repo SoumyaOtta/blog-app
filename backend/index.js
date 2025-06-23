@@ -44,7 +44,7 @@ cloudinary.config({
 
 const startServer = async () => {
   try {
-    await mongoose.connect(MONGO_URI);
+    await mongoose.connect(MONOGO_URL);
     console.log(" Connected to MongoDB");
     app.listen(port, () => {
       console.log(` Server is running on port ${port}`);
