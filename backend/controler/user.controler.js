@@ -2,6 +2,7 @@ import { User } from "../models/user.model.js";
 import { v2 as cloudinary } from "cloudinary";
 import bcrypt from "bcryptjs";
 import createTokenAndSaveCookies from "../jwt/AuthToken.js";
+import streamifier from "streamifier";
 
 export const register = async (req, res) => {
   try {
@@ -33,11 +34,20 @@ export const register = async (req, res) => {
         .status(400)
         .json({ message: "User already exists with this email" });
     }
-    const cloudinaryResponse = await cloudinary.uploader.upload(
-      photo.tempFilePath
-    );
+    const cloudinaryResponse = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: "users" },
+        (error, result) => {
+          if (result) resolve(result);
+          else reject(error);
+        }
+      );
+      streamifier.createReadStream(photo.data).pipe(uploadStream);
+    });
+
     if (!cloudinaryResponse || cloudinaryResponse.error) {
       console.log(cloudinaryResponse.error);
+      return res.status(500).json({ message: "Image upload failed" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
