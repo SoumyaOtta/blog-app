@@ -1,0 +1,1 @@
+export const BACKEND_URL = "https://blog-app-2da6.onrender.com";
