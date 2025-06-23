@@ -18,7 +18,7 @@ const MONOGO_URL = process.env.MONGO_URI;
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: "http://localhost:5173", // Replace with your frontend URL
+  origin: "https://blog-app-blond-mu.vercel.app", // Replace with your frontend URL
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   methods: ["GET", "POST", "PUT", "DELETE"],
 }));
@@ -30,12 +30,6 @@ app.use(fileUpload({
 
 //DB Code
 
-try {
-   mongoose.connect(MONOGO_URL)
-   console.log("connected to MonogoDB")
-} catch (error) {
-    console.error(error);
-}
 
 // defining routes
 app.use("/api/users", userRoute);
@@ -48,6 +42,17 @@ cloudinary.config({
         api_secret: process.env.CLOUD_SECRET_KEY
     });
 
-app.listen(port, () => {
-  console.log(`Surver is running on port ${port}`)
-});
+const startServer = async () => {
+  try {
+    await mongoose.connect(MONGO_URI);
+    console.log(" Connected to MongoDB");
+    app.listen(port, () => {
+      console.log(` Server is running on port ${port}`);
+    });
+  } catch (err) {
+    console.error(" MongoDB connection failed:", err);
+    process.exit(1); // Exit with failure
+  }
+};
+
+startServer();
